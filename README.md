@@ -30,6 +30,9 @@ I'm currently running python 3.10.1 with pip 21.2.5. The following project depen
 * opencv-python      4.5.5.62
 * pynput             1.7.6
 
+Also make sure you got ahk installed. 
+You can download it here https://www.autohotkey.com/
+
 # How to run
 Make sure chiaki is running and that you are on the world selection screen. And just open powershell and run "python gran_turismo.py".
 It should start selecting the pan american championship and start the race. To stop the script just go to your terminal/powershell and ctrl+c ;-)
