@@ -15,6 +15,7 @@ The input keys need to be setup like this:
 <img src="images/chiaki_input_settings.png" width="300">
 
 # Car and Assistance
+* Camera: 3rd person follow cam
 * Car: Tomhawk S VGT (other cars will probably be fine)
 * Transmission: AT
 * TC: 5
