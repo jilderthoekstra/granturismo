@@ -31,7 +31,7 @@ I'm currently running python 3.10.1 with pip 21.2.5. The following project depen
 
 # How to run
 Make sure chiaki is running and that you are on the world selection screen. And just open powershell and run "python gran_turismo.py".
-It should start selected the pan american championship and start the race.
+It should start selected the pan american championship and start the race. To stop the script just go to your terminal/powershell and ctrl+c ;-)
 
 <img src="images/world_screen.png" width="300">
 
