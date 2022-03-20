@@ -41,11 +41,11 @@ Simple menu selections will be done by just pressing d-pad keys a number of time
 For screens where the x icon is visible it will always wait till it is visible and then press the button. 
 After the button is clicked to start the race it will just wait a number of seconds and just press the throttle and nitro button.
 It will check the countersteering icon to see if we are on the straight or in a corner.
-To check if the race is finished it will check for the letter F in the word "FINISH" if you're game is not english this may cause issues.
+To check if the race is finished it will check for the letter F in the word "FINISH" if your game is not english this may cause issues.
 After that it should automaticly click through all the screens and exit out the championship.
 It will check the upper left icon to see if we arrived back at the world circuit screen.
 
-(if some image comparisons don't work on your setup you need to may need to replace the assets in the assets folder. I added a screenshots script which you
+(if some image comparisons don't work on your setup you may need to replace the assets in the assets folder. I added a screenshot script which you
 can start with "python screenshot.py" and press ']' to take a screenshot. It will only grab the remote play stream. This way you can also easily check the coordinates in gimp to setup the detection rectangles in the code.
 
 # BUGS
