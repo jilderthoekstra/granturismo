@@ -36,6 +36,8 @@ You can download it here https://www.autohotkey.com/
 # How to run
 Make sure chiaki is running and that you are on the world selection screen. And just open powershell and run "python gran_turismo.py".
 It should start selecting the pan american championship and start the race. To stop the script just go to your terminal/powershell and ctrl+c ;-)
+If the car is not steering or it steering to much open config.py file and adjust the value. Lowering the value will make the car steer more agressive.
+You can display the similarity value if you turn debug in the config to True which will hopefully make finetuning a bit easier.
 
 <img src="images/world_screen.png" width="300">
 
@@ -51,6 +53,3 @@ It will check the upper left icon to see if we arrived back at the world circuit
 
 (if some image comparisons don't work on your setup you may need to replace the assets in the assets folder. I added a screenshot script which you
 can start with "python screenshot.py" and press ']' to take a screenshot. It will only grab the remote play stream. This way you can also easily check the coordinates in gimp to setup the detection rectangles in the code.
-
-# BUGS
-It probably will get stuck if you receive a roulette ticket. So a check needs to be added if a roulette ticket is received
