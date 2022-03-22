@@ -24,14 +24,14 @@ The input keys need to be setup like this:
 
 # Python
 I'm currently running python 3.10.1 with pip 21.2.5. The following project dependancies need to be installed.
-* ~~ahk                0.13.0
-* ~~mss                6.1.0
+* ~~ahk                0.13.0~~
+* ~~mss                6.1.0~~
 * numpy              1.22.0
 * opencv-python      4.5.5.62
 * pywin32            303
 * pynput             1.7.6 (only for screenshot.py)
 
-~~Also make sure you got ahk installed. You can download it here https://www.autohotkey.com/
+~~Also make sure you got ahk installed. You can download it here https://www.autohotkey.com/~~
 
 # How to run
 Make sure chiaki is running and that you are on the world selection screen. And just open powershell and run "python gran_turismo.py".
