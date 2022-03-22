@@ -7,6 +7,7 @@ STEERING_SIMILARITY_THRESHOLD = -0.5
 # This will also give you a small window next to the chiaki stream this should display the 
 # countersteering icon.
 SHOW_SIMILARITY_DEBUG = False
+SHOW_DETECTION_RECT_DEBUG = False
 # Input keys. These need to match with what is set in Chiaki.
 # https://docs.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
 DPAD_LEFT = 0x25

@@ -4,6 +4,7 @@ import win32ui
 import win32con
 import numpy as np
 import time
+import threading
 
 class WindowInfo:
     x = 0
@@ -39,6 +40,7 @@ class WindowInfo:
         self.wDC = win32gui.GetWindowDC(self.hwnd)
         self.dcObj = win32ui.CreateDCFromHandle(self.wDC)
         self.cDC = self.dcObj.CreateCompatibleDC()
+        self.lock = threading.Lock()
     
     def is_active(self) -> int:
         return self.hwnd > 0
@@ -50,17 +52,20 @@ class WindowInfo:
             win32gui.ReleaseDC(self.hwnd, self.wDC)     
 
     def grab(self, rect) -> np.ndarray:
-        dataBitMap = win32ui.CreateBitmap()
-        dataBitMap.CreateCompatibleBitmap(self.dcObj, rect['width'], rect['height'])
-        self.cDC.SelectObject(dataBitMap)
-        self.cDC.BitBlt((0,0),(rect['width'], rect['height']) , self.dcObj, (self.offset_x + rect['left'], self.offset_y + rect['top']), win32con.SRCCOPY)
-        signedIntsArray = dataBitMap.GetBitmapBits(True)
-        img = np.fromstring(signedIntsArray, dtype='uint8')
-        img.shape = (rect['height'], rect['width'], 4)
+        self.lock.acquire()
+        try:
+            dataBitMap = win32ui.CreateBitmap()
+            dataBitMap.CreateCompatibleBitmap(self.dcObj, rect['width'], rect['height'])
+            self.cDC.SelectObject(dataBitMap)
+            self.cDC.BitBlt((0,0),(rect['width'], rect['height']) , self.dcObj, (self.offset_x + rect['left'], self.offset_y + rect['top']), win32con.SRCCOPY)
+            signedIntsArray = dataBitMap.GetBitmapBits(True)
+            img = np.fromstring(signedIntsArray, dtype='uint8')
+            img.shape = (rect['height'], rect['width'], 4)
 
-        win32gui.DeleteObject(dataBitMap.GetHandle())
-
-        return img
+            win32gui.DeleteObject(dataBitMap.GetHandle())
+        finally:
+            self.lock.release()
+            return img
 
     def save(self, rect, name):
         dataBitMap = win32ui.CreateBitmap()

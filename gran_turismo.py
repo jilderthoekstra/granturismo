@@ -5,6 +5,7 @@ import time
 import config
 import logging
 import log_message
+from threading import Thread
 
 def draw_preview(title, image):
     cv.imshow(title, image)
@@ -13,6 +14,35 @@ def draw_preview(title, image):
     if cv.waitKey(1) == ord('q'):
         cv.destroyAllWindows()
         exit()
+
+def draw_rectangles():
+    while True:
+        rect = { 'left' : 0, 'top' : 0, 'width': window.content_width, 'height': window.content_height }
+        rect_color = (255, 255, 255) # BGR
+        image = window.grab(rect)
+        rectangles = {
+            "Steering" : steering_rect,
+            "Cross Center" : cross_center_rect,
+            "Cross Right" : cross_right_rect,
+            "Finish (F)" : finish_rect,
+            "GT Logo" : gt_logo_rect
+        }
+
+        font = cv.FONT_HERSHEY_SIMPLEX
+        font_scale = 0.5
+        text_color = (255, 255, 255)
+        text_thickness = 1
+        for key, value in rectangles.items():
+            image = cv.rectangle(image, (value['left'], value['top']), (value['left'] + value['width'], value['top'] + value['height']), rect_color, 2)
+            text_position = [value['left'], value['top'] - 10]
+            if value['top'] < 10:
+                text_position[1] = value['top'] + value['height'] + 15        
+            image = cv.putText(image, key, text_position, font, font_scale, text_color, text_thickness, cv.LINE_AA)    
+        cv.imshow("Detection Rectangles | Press q to close this window. After that terminate program ctrl+c", image)
+
+        if cv.waitKey(1) == ord('q'):
+            cv.destroyAllWindows()
+            exit()
 
 # check if there is the cross icon on screen inside the given rectangle
 def handle_cross_input(rects, timeout=99.0):
@@ -90,6 +120,8 @@ if not window.is_active():
 else:
     logging.info('Chiaki window found.')
 
+logging.info('Window content size width: {} height: {}'.format(window.content_width, window.content_height))
+
 steering_rect = {
     'left' : 863,
     'top' : 649,
@@ -126,6 +158,10 @@ gt_logo_rect = {
 }
 
 cross_icon_locations = [ cross_center_rect, cross_right_rect ]
+
+if config.SHOW_DETECTION_RECT_DEBUG:
+    t = Thread(target = draw_rectangles)
+    t.start() 
 
 logging.info("Starting bot")
 time.sleep(0.5)
