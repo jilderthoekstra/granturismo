@@ -80,6 +80,11 @@ class WindowInfo:
         time.sleep(0.1)
         win32api.SendMessage(self.hwnd, win32con.WM_KEYUP, key, 0)
         time.sleep(sleep)
+    
+    def key_press(self, key, duration):
+        win32api.SendMessage(self.hwnd, win32con.WM_KEYDOWN, key, 0)
+        time.sleep(duration)
+        win32api.SendMessage(self.hwnd, win32con.WM_KEYUP, key, 0)
 
     def key_down(self, key):
         win32api.SendMessage(self.hwnd, win32con.WM_KEYDOWN, key, 0)

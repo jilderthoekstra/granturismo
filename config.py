@@ -8,6 +8,7 @@ STEERING_SIMILARITY_THRESHOLD = -5.0
 # countersteering icon.
 SHOW_SIMILARITY_DEBUG = False
 SHOW_DETECTION_RECT_DEBUG = False
+USE_RACE_START_MACRO = True
 # Input keys. These need to match with what is set in Chiaki.
 # https://docs.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
 DPAD_LEFT = 0x25

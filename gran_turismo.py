@@ -15,6 +15,19 @@ def draw_preview(title, image):
         cv.destroyAllWindows()
         exit()
 
+def execute_race_start_steering_macro():
+    logging.info("Executing Race Macro")
+    time.sleep(0.6)
+    window.key_press(config.LEFT_STICK_RIGHT, 0.21)
+    time.sleep(4.0)
+    window.key_press(config.LEFT_STICK_RIGHT, 0.25)
+    time.sleep(0.5)
+    window.key_press(config.LEFT_STICK_RIGHT, 0.25)
+    time.sleep(0.5)
+    window.key_press(config.LEFT_STICK_RIGHT, 0.25)
+    time.sleep(0.5)
+    logging.info("Ended Race Macro")
+
 def draw_rectangles():
     while True:
         rect = { 'left' : 0, 'top' : 0, 'width': window.content_width, 'height': window.content_height }
@@ -25,7 +38,8 @@ def draw_rectangles():
             "Cross Center" : cross_center_rect,
             "Cross Right" : cross_right_rect,
             "Finish (F)" : finish_rect,
-            "GT Logo" : gt_logo_rect
+            "GT Logo" : gt_logo_rect,
+            "Race Start" : race_start_rect,
         }
 
         font = cv.FONT_HERSHEY_SIMPLEX
@@ -103,6 +117,18 @@ def has_reached_finished():
         return True
     return False
 
+def wait_for_race_start():
+    race_start_in_1_second = False
+    while not race_start_in_1_second:
+        screen_colored = np.array(window.grab(race_start_rect))
+        #draw_preview("Waiting For WorldScreen", screen_colored)
+        screen_grab = cv.cvtColor(screen_colored, cv.COLOR_BGR2GRAY)
+        result = cv.matchTemplate(screen_grab, race_start_1_template, cv.TM_CCOEFF_NORMED, race_start_1_template_mask)
+        locations = np.where(result >= 0.9)
+        locations = list(zip(*locations[::-1]))
+        if locations:
+            race_start_in_1_second = True
+    logging.info("Race will start in 1 second")
 
 steering_template = cv.imread('./assets/steering.png', cv.IMREAD_UNCHANGED)
 cross_template = cv.imread('./assets/cross_template.png', cv.IMREAD_GRAYSCALE)
@@ -110,6 +136,8 @@ cross_template_mask = cv.imread('./assets/cross_template_mask.png', cv.IMREAD_GR
 finish_template = cv.imread('./assets/finish_template.png', cv.IMREAD_GRAYSCALE)
 finish_template_mask = cv.imread('./assets/finish_template_mask.png', cv.IMREAD_GRAYSCALE)
 worldscreen_template = cv.imread('./assets/worldscreen_template.png', cv.IMREAD_GRAYSCALE)
+race_start_1_template = cv.imread('./assets/race_start_1_template.png', cv.IMREAD_GRAYSCALE)
+race_start_1_template_mask = cv.imread('./assets/race_start_1_template_mask.png', cv.IMREAD_GRAYSCALE)
 
 window = window_info.WindowInfo()
 
@@ -121,6 +149,8 @@ else:
     logging.info('Chiaki window found.')
 
 logging.info('Window content size width: {} height: {}'.format(window.content_width, window.content_height))
+if (window.content_width != 1280 or window.content_height != 720):
+    logging.info("Stream content window should be 1280x720 but it is not. This can lead to unexpected behaviour!")
 
 steering_rect = {
     'left' : 863,
@@ -157,6 +187,12 @@ gt_logo_rect = {
     'height' : 60,
 }
 
+race_start_rect = {
+    'left' : 620,
+    'top' : 330,
+    'width' : 40,
+    'height' : 60
+}
 cross_icon_locations = [ cross_center_rect, cross_right_rect ]
 
 if config.SHOW_DETECTION_RECT_DEBUG:
@@ -177,7 +213,7 @@ while True:
     logging.info("Waiting for race start screen")
     handle_cross_input([cross_center_rect])
     wait_for_gt_logo()
-    logging.info("Starting race")
+    logging.info("Moving to racetrack")
     window.key_click(config.CROSS, 0.5)
     time.sleep(5.0)
 
@@ -186,9 +222,15 @@ while True:
     ######################
     is_racing = True
     is_steering_right = False
-
+    wait_for_race_start()
     window.key_down(config.R2) # throttle
     window.key_down(config.R3) # nitro / electro boost power
+    time.sleep(1.0)
+    logging.info("Race Start!")    
+
+    if config.USE_RACE_START_MACRO:
+        execute_race_start_steering_macro()
+        logging.info('Resuming auto drive')
 
     while is_racing:
         is_steering_right = handle_steering_with_similarity_check(is_steering_right)
