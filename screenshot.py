@@ -1,17 +1,17 @@
 from pynput import keyboard
 from pynput.keyboard import Key, Controller
-import mss
-import mss.tools
 import window_info
 from time import time
 
 keyboard_controller = Controller()
 
+window = window_info.WindowInfo()
+
 window_rect = { 
-    'left' : window_info.x() + 10,
-    'top' : window_info.y() + 31,
-    'width' : window_info.width() - 20,
-    'height' : window_info.height() - 41,
+    'left' : 0,
+    'top' : 0,
+    'width' : window.content_width,
+    'height' : window.content_height,
 }
 
 def on_press(key):
@@ -27,10 +27,8 @@ def on_release(key):
 
 def save_screenshot(folder):
     global window_rect
-    name = './{0}/{1}.png'.format(folder, time())
-    with mss.mss() as sct:    
-        sct_img = sct.grab(window_rect)
-        mss.tools.to_png(sct_img.rgb, sct_img.size, output=name)
+    name = './{0}/{1}.bmp'.format(folder, time())
+    window.save(window_rect, name)
     print('Saved screenshot '+ name)
 
 listener = keyboard.Listener(

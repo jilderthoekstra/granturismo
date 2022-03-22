@@ -1,5 +1,5 @@
 # About
-First of all this was never setup to be a portable solution that would work on any configuration. The way it's setup works good for my setup. It may not work for you out of the box. If you have no programming knowledge it maybe be difficult to get it working. I've only tested this in combination with PS5 it may or may not work correctly with PS4 or just may need some tuning for the sleep values considering loadtimes will be very different. The code is just slapt together really quickly so don't hate me for it :p I hope this helps you get started by experimenting yourself with how you can automate things by just using screendata.
+First of all this was never setup to be a portable solution that would work on any configuration. The way it's setup works good for my setup. It may not work for you out of the box. If you have no programming knowledge it maybe be difficult to get it working. I've only tested this in combination with PS5 it may or may not work correctly with PS4 or just may need some tuning for the sleep values considering loadtimes will be very different. The code is just slapt together really quickly so don't hate me for it :p I hope this helps you get started by experimenting yourself with how you can automate things by just using screendata. This will only run on Windows.
 
 # Remote play setup
 The script works in combination with the Chiaki remote play client.
@@ -24,18 +24,21 @@ The input keys need to be setup like this:
 
 # Python
 I'm currently running python 3.10.1 with pip 21.2.5. The following project dependancies need to be installed.
-* ahk                0.13.0
-* mss                6.1.0
+* ~~ahk                0.13.0
+* ~~mss                6.1.0
 * numpy              1.22.0
 * opencv-python      4.5.5.62
-* pynput             1.7.6
+* pywin32            303
+* pynput             1.7.6 (only for screenshot.py)
 
-Also make sure you got ahk installed. 
-You can download it here https://www.autohotkey.com/
+~~Also make sure you got ahk installed. You can download it here https://www.autohotkey.com/
 
 # How to run
 Make sure chiaki is running and that you are on the world selection screen. And just open powershell and run "python gran_turismo.py".
-It should start selecting the pan american championship and start the race. To stop the script just go to your terminal/powershell and ctrl+c ;-)
+Do not resize the stream window. You can move the window but don't move it offscreen or minimize it. 
+You can put other windows on top of it and it "should" still work fine. Doing other stuff can potentially cause artifacts in the stream for
+some reason. So it could have a negative impact on the image recognitions logic.
+After starting the script it should start selecting the pan american championship and start the race. To stop the script just go to your terminal/powershell and ctrl+c ;-)
 If the car is not steering or it steering to much open config.py file and adjust the value. Lowering the value will make the car steer more agressive.
 You can display the similarity value if you turn debug in the config to True which will hopefully make finetuning a bit easier.
 
