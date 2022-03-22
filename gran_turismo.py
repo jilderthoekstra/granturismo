@@ -223,3 +223,5 @@ while True:
         window.key_click(config.DPAD_RIGHT, 0.2)
     window.key_click(config.CROSS, 0.5)
     window.key_click(config.CROSS, 0.5)
+    time.sleep(5.0)
+
