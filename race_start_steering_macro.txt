@@ -1,0 +1,14 @@
+# This script can be used to pass the first 3 cars and move the car back to the wall
+# sleep duration (ex: sleep 0.6 will hold for 0.6 second until moving to the next line)
+# key_press the_key_to_press duration_the_key_is_press (ex: key_press LEFT_STICK_RIGHT 0.21)
+# key_down the_key_to_hold_down (ex key_down R2 after calling key_down you also need to call key_up at some point
+# key_up the_key_to_release (ex key_up R2 release the key which was called with key_down
+sleep 0.6
+key_press LEFT_STICK_RIGHT 0.21
+sleep 4.0
+key_press LEFT_STICK_RIGHT 0.25
+sleep 0.5
+key_press LEFT_STICK_RIGHT 0.25
+sleep 0.5
+key_press LEFT_STICK_RIGHT 0.25
+sleep 0.5

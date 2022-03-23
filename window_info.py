@@ -34,6 +34,8 @@ class WindowInfo:
         self.y = windows_rect[1]
         self.width = windows_rect[2] - windows_rect[0]
         self.height = windows_rect[3] - windows_rect[1]
+        self.border_size = int((self.width - 1280) * 0.5)
+        self.titlebar_size = int(self.height - 720 - self.border_size)
         self.content_width = self.width - (self.border_size * 2)
         self.content_height = self.height - self.titlebar_size - self.border_size
 

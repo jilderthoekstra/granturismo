@@ -16,17 +16,27 @@ def draw_preview(title, image):
         exit()
 
 def execute_race_start_steering_macro():
-    logging.info("Executing Race Macro")
-    time.sleep(0.6)
-    window.key_press(config.LEFT_STICK_RIGHT, 0.21)
-    time.sleep(4.0)
-    window.key_press(config.LEFT_STICK_RIGHT, 0.25)
-    time.sleep(0.5)
-    window.key_press(config.LEFT_STICK_RIGHT, 0.25)
-    time.sleep(0.5)
-    window.key_press(config.LEFT_STICK_RIGHT, 0.25)
-    time.sleep(0.5)
-    logging.info("Ended Race Macro")
+    logging.info("Executing Race Start Macro")
+    for command in race_start_steering_macro:
+        elements = command.split(' ')
+        if elements[0] == 'sleep':
+            time.sleep(float(elements[1]))
+        elif elements[0] == 'key_press':
+            window.key_press(config.get_key_for_string(elements[1]), float(elements[2]))
+        elif elements[0] == 'key_down':
+            window.key_down(config.get_key_for_string(elements[1]))
+        elif elements[0] == 'key_up':
+            window.key_up(config.get_key_for_string(elements[1]))
+    logging.info("Ended Race Start Macro")
+
+def load_race_start_steering_macro():
+    file = open("race_start_steering_macro.txt", "r")
+    for line in file:
+        line = line.rstrip()
+        if (line[0] == '#'):
+            continue
+        race_start_steering_macro.append(line)       
+    file.close()
 
 def draw_rectangles():
     while True:
@@ -144,13 +154,20 @@ window = window_info.WindowInfo()
 logging.info('Looking for chiaki window')
 if not window.is_active():
     logging.info('Chiaki | Stream window not found')
+    time.sleep(2.0)
     exit()
 else:
     logging.info('Chiaki window found.')
 
-logging.info('Window content size width: {} height: {}'.format(window.content_width, window.content_height))
-if (window.content_width != 1280 or window.content_height != 720):
-    logging.info("Stream content window should be 1280x720 but it is not. This can lead to unexpected behaviour!")
+#logging.info('Window content size width: {} height: {}'.format(window.content_width, window.content_height))
+#if (window.content_width != 1280 or window.content_height != 720):
+#    logging.info("Stream content window should be 1280x720 but it is not. This can lead to unexpected behaviour!")
+logging.info('Calculated window border width {}'.format(window.border_size))
+logging.info('Calculated window titlebar height {}'.format(window.titlebar_size))
+
+config.load_config_file()
+race_start_steering_macro = []
+load_race_start_steering_macro()
 
 steering_rect = {
     'left' : 863,
@@ -193,30 +210,38 @@ race_start_rect = {
     'width' : 40,
     'height' : 60
 }
+
 cross_icon_locations = [ cross_center_rect, cross_right_rect ]
 
 if config.SHOW_DETECTION_RECT_DEBUG:
     t = Thread(target = draw_rectangles)
     t.start() 
 
-logging.info("Starting bot")
 time.sleep(0.5)
 while True:
-    logging.info("Waiting for worldscreen")
-    wait_for_gt_logo()
-    logging.info("Selecting championship")
-    window.key_click(config.DPAD_DOWN, 0.5)
-    for i in range(6):
-        window.key_click(config.DPAD_RIGHT, 0.2)
-    window.key_click(config.CROSS, 1.0)
-    window.key_click(config.CROSS, 0.5)
-    logging.info("Waiting for race start screen")
-    handle_cross_input([cross_center_rect])
-    wait_for_gt_logo()
-    logging.info("Moving to racetrack")
-    window.key_click(config.CROSS, 0.5)
-    time.sleep(5.0)
+    if not config.SKIP_MENU_SELECTION:
+        logging.info("Waiting for worldscreen")
+        wait_for_gt_logo()
+        logging.info("Selecting championship")
+        window.key_click(config.DPAD_DOWN, 0.5)
+        for i in range(6):
+            window.key_click(config.DPAD_RIGHT, 0.2)
+        window.key_click(config.CROSS, 1.0)
+        window.key_click(config.CROSS, 0.5)
+        logging.info("Waiting for race start screen")
+        handle_cross_input([cross_center_rect])
+        wait_for_gt_logo()
+        logging.info("Moving to racetrack")
+        window.key_click(config.CROSS, 0.5)
+        time.sleep(5.0)
+    else:
+        # send quick keypress to reset the keys during debug or keys might sometimes get stuck while testing.
+        window.key_press(config.LEFT_STICK_LEFT, 0.1)
+        window.key_press(config.LEFT_STICK_RIGHT, 0.1)
+        window.key_press(config.R2, 0.1) # throttle
+        window.key_press(config.R3, 0.1)
 
+    logging.info("Waiting for race countdown")
     ######################
     # racing        ######
     ######################

@@ -1,3 +1,50 @@
+from configparser import ConfigParser
+
+def load_config_file():
+    config_file = ConfigParser()
+    config_file.read('config.ini')
+    
+    global STEERING_SIMILARITY_THRESHOLD, USE_RACE_START_MACRO, DPAD_LEFT, DPAD_RIGHT
+    global DPAD_UP, DPAD_DOWN, LEFT_STICK_LEFT, LEFT_STICK_RIGHT, LEFT_STICK_UP, LEFT_STICK_DOWN
+    global RIGHT_STICK_LEFT, RIGHT_STICK_RIGHT, RIGHT_STICK_UP, RIGHT_STICK_DOWN, L1, L2, L3
+    global R1, R2, R3, CROSS, SQUARE, CIRCLE, TRIANGLE, SHARE, OPTIONS, PS, TOUCHPAD
+    global SHOW_SIMILARITY_DEBUG, SHOW_DETECTION_RECT_DEBUG, SKIP_MENU_SELECTION
+
+    STEERING_SIMILARITY_THRESHOLD = config_file.getfloat('CONFIG', 'STEERING_SIMILARITY_THRESHOLD')
+    USE_RACE_START_MACRO = config_file.getboolean('CONFIG', 'USE_RACE_START_MACRO')
+    DPAD_LEFT = int(config_file.get('CONTROLS', 'DPAD_LEFT'), 0)
+    DPAD_RIGHT = int(config_file.get('CONTROLS', 'DPAD_RIGHT'), 0)
+    DPAD_UP = int(config_file.get('CONTROLS', 'DPAD_UP'), 0)
+    DPAD_DOWN = int(config_file.get('CONTROLS', 'DPAD_DOWN'), 0)
+    LEFT_STICK_LEFT = int(config_file.get('CONTROLS', 'LEFT_STICK_LEFT'), 0)
+    LEFT_STICK_RIGHT = int(config_file.get('CONTROLS', 'LEFT_STICK_RIGHT'), 0)
+    LEFT_STICK_UP = int(config_file.get('CONTROLS', 'LEFT_STICK_UP'), 0)
+    LEFT_STICK_DOWN = int(config_file.get('CONTROLS', 'LEFT_STICK_DOWN'), 0)
+    RIGHT_STICK_LEFT = int(config_file.get('CONTROLS', 'RIGHT_STICK_LEFT'), 0)
+    RIGHT_STICK_RIGHT = int(config_file.get('CONTROLS', 'RIGHT_STICK_RIGHT'), 0)
+    RIGHT_STICK_UP = int(config_file.get('CONTROLS', 'RIGHT_STICK_UP'), 0)
+    RIGHT_STICK_DOWN = int(config_file.get('CONTROLS', 'RIGHT_STICK_DOWN'), 0)
+    L1 = int(config_file.get('CONTROLS', 'L1'), 0)
+    L2 = int(config_file.get('CONTROLS', 'L2'), 0)
+    L3 = int(config_file.get('CONTROLS', 'L3'), 0)
+    R1 = int(config_file.get('CONTROLS', 'R1'), 0)
+    R2 = int(config_file.get('CONTROLS', 'R2'), 0)
+    R3 = int(config_file.get('CONTROLS', 'R3'), 0)
+    CROSS = int(config_file.get('CONTROLS', 'CROSS'), 0)
+    SQUARE = int(config_file.get('CONTROLS', 'SQUARE'), 0)
+    CIRCLE = int(config_file.get('CONTROLS', 'CIRCLE'), 0)
+    TRIANGLE = int(config_file.get('CONTROLS', 'TRIANGLE'), 0)
+    SHARE = int(config_file.get('CONTROLS', 'SHARE'), 0)
+    OPTIONS = int(config_file.get('CONTROLS', 'OPTIONS'), 0)
+    PS = int(config_file.get('CONTROLS', 'PS'), 0)
+    TOUCHPAD = int(config_file.get('CONTROLS', 'TOUCHPAD'), 0)
+    SHOW_SIMILARITY_DEBUG = config_file.getboolean('DEBUG', 'SHOW_SIMILARITY_DEBUG')
+    SHOW_DETECTION_RECT_DEBUG = config_file.getboolean('DEBUG', 'SHOW_DETECTION_RECT_DEBUG')
+    SKIP_MENU_SELECTION = config_file.getboolean('DEBUG', 'SKIP_MENU_SELECTION')
+
+def get_key_for_string(key):
+    return globals()[key]
+
 # if the car doesn't steer try lowering this value
 STEERING_SIMILARITY_THRESHOLD = -5.0
 # Setting this to True to see the similarity value in the console to 
@@ -8,6 +55,8 @@ STEERING_SIMILARITY_THRESHOLD = -5.0
 # countersteering icon.
 SHOW_SIMILARITY_DEBUG = False
 SHOW_DETECTION_RECT_DEBUG = False
+# Skip menu selection is useful if you want the tweak the race start macro. This way you can just restart the bot and click restart race.
+SKIP_MENU_SELECTION = False
 USE_RACE_START_MACRO = True
 # Input keys. These need to match with what is set in Chiaki.
 # https://docs.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
