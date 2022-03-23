@@ -1,5 +1,8 @@
 # About
-First of all this was never setup to be a portable solution that would work on any configuration. The way it's setup works good for my setup. It may not work for you out of the box. If you have no programming knowledge it maybe be difficult to get it working. I've only tested this in combination with PS5 it may or may not work correctly with PS4 or just may need some tuning for the sleep values considering loadtimes will be very different. The code is just slapt together really quickly so don't hate me for it :p I hope this helps you get started by experimenting yourself with how you can automate things by just using screendata. This will only run on Windows.
+First of all this was never setup to be a portable solution that would work on any configuration. The way it's setup works good for my setup. It may not work for you out of the box. If you have no programming knowledge it maybe be difficult to get it working. I've only tested this in combination with PS5 it may or may not work correctly with PS4 or just may need some tuning for the sleep values considering loadtimes will be very different. The code is just slapt together really quickly so don't hate me for it :p I hope this helps you get started by experimenting yourself with how you can automate things by just using screendata. Anyone is free to use this whoever you like. This will only run on Windows.
+
+Also don't forget to check out alternatives like Septomor's driving script:
+https://forum.psnprofiles.com/topic/124003-afk-methods-for-farming/
 
 # Remote play setup
 The script works in combination with the Chiaki remote play client.
