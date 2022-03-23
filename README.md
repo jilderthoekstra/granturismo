@@ -4,6 +4,11 @@ First of all this was never setup to be a portable solution that would work on a
 Also don't forget to check out alternatives like Septomor's driving script:
 https://forum.psnprofiles.com/topic/124003-afk-methods-for-farming/
 
+# Binary Build
+If you don't want to go to the trouble of installing python you can download the release build at the release page. https://github.com/aimerror/granturismo/releases
+
+This will be a pretty beefy filesize but should work just as well. This will ofcourse still require you to install Chiaki Remote play.
+
 # Remote play setup
 The script works in combination with the Chiaki remote play client.
 https://git.sr.ht/~thestr4ng3r/chiaki/refs/v2.1.1
