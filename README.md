@@ -67,4 +67,4 @@ can start with "python screenshot.py" and press ']' to take a screenshot. It wil
 
 Also check the debug_rects window to see if everything lines up correctly. You can get this by setting SHOW_DETECTION_RECT_DEBUG to True. It should look like this.
 
-<img src="images/world_screen.png" width="300">
+<img src="images/debug_rects.png" width="300">
