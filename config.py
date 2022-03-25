@@ -1,4 +1,5 @@
 from configparser import ConfigParser
+import json
 
 def load_config_file():
     config_file = ConfigParser()
@@ -9,6 +10,7 @@ def load_config_file():
     global RIGHT_STICK_LEFT, RIGHT_STICK_RIGHT, RIGHT_STICK_UP, RIGHT_STICK_DOWN, L1, L2, L3
     global R1, R2, R3, CROSS, SQUARE, CIRCLE, TRIANGLE, SHARE, OPTIONS, PS, TOUCHPAD
     global SHOW_SIMILARITY_DEBUG, SHOW_DETECTION_RECT_DEBUG, SKIP_MENU_SELECTION
+    global STEERING_RECT, CROSS_CENTER_RECT, CROSS_RIGHT_RECT, FINISH_RECT, GT_LOGO_RECT, RACE_START_RECT
 
     STEERING_SIMILARITY_THRESHOLD = config_file.getfloat('CONFIG', 'STEERING_SIMILARITY_THRESHOLD')
     USE_RACE_START_MACRO = config_file.getboolean('CONFIG', 'USE_RACE_START_MACRO')
@@ -42,8 +44,26 @@ def load_config_file():
     SHOW_DETECTION_RECT_DEBUG = config_file.getboolean('DEBUG', 'SHOW_DETECTION_RECT_DEBUG')
     SKIP_MENU_SELECTION = config_file.getboolean('DEBUG', 'SKIP_MENU_SELECTION')
 
+    STEERING_RECT = json.loads(config_file.get('CONFIG', 'STEERING_RECT'))
+    CROSS_CENTER_RECT = json.loads(config_file.get('CONFIG', 'CROSS_CENTER_RECT'))
+    CROSS_RIGHT_RECT = json.loads(config_file.get('CONFIG', 'CROSS_RIGHT_RECT'))
+    FINISH_RECT = json.loads(config_file.get('CONFIG', 'FINISH_RECT'))
+    GT_LOGO_RECT = json.loads(config_file.get('CONFIG', 'GT_LOGO_RECT'))  
+    RACE_START_RECT = json.loads(config_file.get('CONFIG', 'RACE_START_RECT'))    
+
 def get_key_for_string(key):
     return globals()[key]
+
+STEERING_RECT = { 'left' : 863, 'top' : 649, 'width' : 15, 'height' : 15 }
+CROSS_CENTER_RECT = { 'left' : 580, 'top' : 630, 'width' : 80, 'height' : 80 }
+CROSS_RIGHT_RECT = { 'left' : 1150, 'top' : 620, 'width' : 60, 'height' : 60, }
+FINISH_RECT = { 'left' : 450, 'top' : 310, 'width' : 100, 'height' : 100 }
+GT_LOGO_RECT = {'left' : 0, 'top' : 0, 'width' : 70, 'height' : 70 }
+RACE_START_RECT = { 'left' : 600, 'top' : 320, 'width' : 80, 'height' : 80 }
+CROSS_ICON_CHECK_THRESHOLD = 0.85
+FINISH_CHECK_THRESHOLD = 0.85
+GT_LOGO_CHECK_THRESHOLD = 0.85
+RACE_START_CHECK_THRESHOLD = 0.85
 
 # if the car doesn't steer try lowering this value
 STEERING_SIMILARITY_THRESHOLD = -5.0

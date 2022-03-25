@@ -44,12 +44,12 @@ def draw_rectangles():
         rect_color = (255, 255, 255) # BGR
         image = window.grab(rect)
         rectangles = {
-            "Steering" : steering_rect,
-            "Cross Center" : cross_center_rect,
-            "Cross Right" : cross_right_rect,
-            "Finish (F)" : finish_rect,
-            "GT Logo" : gt_logo_rect,
-            "Race Start" : race_start_rect,
+            "Steering" : config.STEERING_RECT,
+            "Cross Center" : config.CROSS_CENTER_RECT,
+            "Cross Right" : config.CROSS_RIGHT_RECT,
+            "Finish (F)" : config.FINISH_RECT,
+            "GT Logo" : config.GT_LOGO_RECT,
+            "Race Start" : config.RACE_START_RECT,
         }
 
         font = cv.FONT_HERSHEY_SIMPLEX
@@ -66,7 +66,7 @@ def draw_rectangles():
 
         if cv.waitKey(1) == ord('q'):
             cv.destroyAllWindows()
-            exit()
+            break
 
 # check if there is the cross icon on screen inside the given rectangle
 def handle_cross_input(rects, timeout=99.0):
@@ -76,7 +76,7 @@ def handle_cross_input(rects, timeout=99.0):
             screen_colored = np.array(window.grab(r))
             screen_grab = cv.cvtColor(screen_colored, cv.COLOR_BGR2GRAY)
             result = cv.matchTemplate(screen_grab, cross_template, cv.TM_CCOEFF_NORMED, cross_template_mask)
-            locations = np.where(result >= 0.9) # if there are problems detecting the icon you can try lowering this value
+            locations = np.where(result >= config.CROSS_ICON_CHECK_THRESHOLD) # if there are problems detecting the icon you can try lowering this value
             locations = list(zip(*locations[::-1]))
             if locations:
                 time.sleep(0.2)
@@ -88,11 +88,11 @@ def handle_cross_input(rects, timeout=99.0):
 def wait_for_gt_logo():
     gt_logo_found = False
     while not gt_logo_found:
-        screen_colored = np.array(window.grab(gt_logo_rect))
+        screen_colored = np.array(window.grab(config.GT_LOGO_RECT))
         #draw_preview("Waiting For WorldScreen", screen_colored)
         screen_grab = cv.cvtColor(screen_colored, cv.COLOR_BGR2GRAY)
         result = cv.matchTemplate(screen_grab, worldscreen_template, cv.TM_CCOEFF_NORMED)
-        locations = np.where(result >= 0.9) # if there are problems detecting the logo you can try lowering this value
+        locations = np.where(result >= config.GT_LOGO_CHECK_THRESHOLD) # if there are problems detecting the logo you can try lowering this value
         locations = list(zip(*locations[::-1]))
         if locations:
             time.sleep(0.2)
@@ -100,9 +100,9 @@ def wait_for_gt_logo():
         time.sleep(0.5)
 
 def handle_steering_with_similarity_check(is_steering_right):
-    steering_grab = np.array(window.grab(steering_rect))
+    steering_grab = np.array(window.grab(config.STEERING_RECT))
     errorL2 = cv.norm(steering_grab, steering_template, cv.NORM_L2 )
-    similarity = 1 - errorL2 / ( steering_rect['height'] * steering_rect['width'] )
+    similarity = 1 - errorL2 / ( config.STEERING_RECT['height'] * config.STEERING_RECT['width'] )
     if config.SHOW_SIMILARITY_DEBUG:
         draw_preview("Steering Icon", steering_grab)
         logging.info('Similarity: {}'.format(similarity))
@@ -117,10 +117,10 @@ def handle_steering_with_similarity_check(is_steering_right):
     return is_steering_right
 
 def has_reached_finished():
-    finish_grab =  np.array(window.grab(finish_rect))
+    finish_grab =  np.array(window.grab(config.FINISH_RECT))
     finish_grab = cv.cvtColor(finish_grab, cv.COLOR_BGR2GRAY)
     result = cv.matchTemplate(finish_grab, finish_template, cv.TM_CCOEFF_NORMED, finish_template_mask)
-    locations = np.where(result >= 0.9)
+    locations = np.where(result >= config.FINISH_CHECK_THRESHOLD)
     locations = list(zip(*locations[::-1]))
     if locations:
         logging.info("Race finished")        
@@ -130,11 +130,11 @@ def has_reached_finished():
 def wait_for_race_start():
     race_start_in_1_second = False
     while not race_start_in_1_second:
-        screen_colored = np.array(window.grab(race_start_rect))
+        screen_colored = np.array(window.grab(config.RACE_START_RECT))
         #draw_preview("Waiting For WorldScreen", screen_colored)
         screen_grab = cv.cvtColor(screen_colored, cv.COLOR_BGR2GRAY)
         result = cv.matchTemplate(screen_grab, race_start_1_template, cv.TM_CCOEFF_NORMED, race_start_1_template_mask)
-        locations = np.where(result >= 0.9)
+        locations = np.where(result >= config.GT_LOGO_CHECK_THRESHOLD)
         locations = list(zip(*locations[::-1]))
         if locations:
             race_start_in_1_second = True
@@ -169,49 +169,7 @@ config.load_config_file()
 race_start_steering_macro = []
 load_race_start_steering_macro()
 
-steering_rect = {
-    'left' : 863,
-    'top' : 649,
-    'width' : 15,
-    'height' : 15,
-}
-
-cross_center_rect = {
-    'left' : 600,
-    'top' : 630,
-    'width' : 40,
-    'height' : 80,
-}
-
-cross_right_rect = {
-    'left' : 1160,
-    'top' : 630,
-    'width' : 40,
-    'height' : 40,
-}
-
-finish_rect = {
-    'left' : 460,
-    'top' : 320,
-    'width' : 80,
-    'height' : 80,
-}
-
-gt_logo_rect = {
-    'left' : 0,
-    'top' : 0,
-    'width' : 60,
-    'height' : 60,
-}
-
-race_start_rect = {
-    'left' : 620,
-    'top' : 330,
-    'width' : 40,
-    'height' : 60
-}
-
-cross_icon_locations = [ cross_center_rect, cross_right_rect ]
+cross_icon_locations = [ config.CROSS_CENTER_RECT, config.CROSS_RIGHT_RECT ]
 
 if config.SHOW_DETECTION_RECT_DEBUG:
     t = Thread(target = draw_rectangles)
@@ -229,17 +187,17 @@ while True:
         window.key_click(config.CROSS, 1.0)
         window.key_click(config.CROSS, 0.5)
         logging.info("Waiting for race start screen")
-        handle_cross_input([cross_center_rect])
+        handle_cross_input([config.CROSS_CENTER_RECT])
         wait_for_gt_logo()
         logging.info("Moving to racetrack")
         window.key_click(config.CROSS, 0.5)
         time.sleep(5.0)
-    else:
-        # send quick keypress to reset the keys during debug or keys might sometimes get stuck while testing.
-        window.key_press(config.LEFT_STICK_LEFT, 0.1)
-        window.key_press(config.LEFT_STICK_RIGHT, 0.1)
-        window.key_press(config.R2, 0.1) # throttle
-        window.key_press(config.R3, 0.1)
+
+    # send quick keypress to reset the keys, keys might sometimes get stuck while testing.
+    window.key_press(config.LEFT_STICK_LEFT, 0.1)
+    window.key_press(config.LEFT_STICK_RIGHT, 0.1)
+    window.key_press(config.R2, 0.1) # throttle
+    window.key_press(config.R3, 0.1)
 
     logging.info("Waiting for race countdown")
     ######################
@@ -271,7 +229,7 @@ while True:
     window.key_up(config.R3)
 
     # check for the cross icon after the race (20 second timeout)
-    handle_cross_input([cross_center_rect], 20) 
+    handle_cross_input([config.CROSS_CENTER_RECT], 20) 
     # check for the cross icon in the menu. We'll keep checking for icons. With a 3.0 second timeout
     # if after 3.0 seconds we don't find an icon then we'll probably be in the replay mode
     # and can move on. This also handles the roulette ticket screen. If for on PS4 loading takes longer
@@ -284,7 +242,7 @@ while True:
     wait_for_gt_logo()
     window.key_click(config.DPAD_RIGHT, 0.2)
     window.key_click(config.CROSS, 0.2)
-    handle_cross_input([cross_center_rect])
+    handle_cross_input([config.CROSS_CENTER_RECT])
     wait_for_gt_logo()
     for i in range(3): # move cursor to exit button
         window.key_click(config.DPAD_RIGHT, 0.2)

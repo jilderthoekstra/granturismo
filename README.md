@@ -64,3 +64,7 @@ It will check the upper left icon to see if we arrived back at the world circuit
 
 (if some image comparisons don't work on your setup you may need to replace the assets in the assets folder. I added a screenshot script which you
 can start with "python screenshot.py" and press ']' to take a screenshot. It will only grab the remote play stream. This way you can also easily check the coordinates in gimp to setup the detection rectangles in the code.
+
+Also check the debug_rects window to see if everything lines up correctly. You can get this by setting SHOW_DETECTION_RECT_DEBUG to True. It should look like this.
+
+<img src="images/world_screen.png" width="300">
