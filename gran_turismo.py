@@ -244,7 +244,7 @@ while True:
     window.key_click(config.CROSS, 0.2)
     handle_cross_input([config.CROSS_CENTER_RECT])
     wait_for_gt_logo()
-    for i in range(3): # move cursor to exit button
+    for i in range(4): # move cursor to exit button 4x right as of GT7 v1.19
         window.key_click(config.DPAD_RIGHT, 0.2)
     window.key_click(config.CROSS, 0.5)
     window.key_click(config.CROSS, 0.5)
